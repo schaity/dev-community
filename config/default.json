@@ -1,3 +1,4 @@
 {
-  "mongoURI": "mongodb+srv://dev-community-rw:chaity123@cluster0-upay4.mongodb.net/test?retryWrites=true&w=majority"
+  "mongoURI": "mongodb+srv://dev-community-rw:chaity123@cluster0-upay4.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret": "mySecretToken"
 }
