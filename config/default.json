@@ -1,4 +1,6 @@
 {
   "mongoURI": "mongodb+srv://dev-community-rw:chaity123@cluster0-upay4.mongodb.net/test?retryWrites=true&w=majority",
-  "jwtSecret": "mySecretToken"
+  "jwtSecret": "mySecretToken",
+  "githubClientId": "2fc445c48a9d46e4066f",
+  "githubSecret": "00137106ef36052a171266c69531463f9e9e0af4"
 }
