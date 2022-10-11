@@ -6,11 +6,12 @@ const router = express.Router();
 const auth = require('../../middleware/auth');
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
+const Post = require('../../models/Post');
 const { check, validationResult } = require('express-validator/check');
 
 //@route  Get api/profile/me
 //@desc   Get current user profile
-//@access provate
+//@access private
 router.get('/me', auth, async (req, res) => {
   try {
     const profile = await Profile.findOne({
@@ -28,7 +29,7 @@ router.get('/me', auth, async (req, res) => {
 
 //@route  POST api/profile
 //@desc   Create or update a user profile
-//@access provate
+//@access private
 router.post(
   '/',
   [
@@ -96,8 +97,6 @@ router.post(
       console.error(err.message);
       res.status(500).send('Server Error');
     }
-
-    res.send('hello');
   }
 );
 
@@ -120,20 +119,20 @@ router.get('/', async (req, res) => {
 router.get('/user/:user_id', async (req, res) => {
   try {
     if (mongoose.Types.ObjectId.isValid(req.params.user_id) == false) {
-      return res.status(400).json({ meg: 'Profile not found' });
+      return res.status(404).json({ msg: 'Profile not found' });
     }
     const profile = await Profile.findOne({
       user: req.params.user_id,
     }).populate('user', ['name', 'avatar']);
     if (!profile) {
-      return res.status(400).json({ meg: 'Profile not found' });
+      return res.status(404).json({ msg: 'Profile not found' });
     }
     res.json(profile);
   } catch (err) {
     console.error(err.message);
     // not working
     if (err.kind == 'ObjectId') {
-      return res.status(400).json({ meg: 'Profile not found' });
+      return res.status(404).json({ msg: 'Profile not found' });
     }
 
     res.status(500).send('Server Error');
@@ -145,6 +144,8 @@ router.get('/user/:user_id', async (req, res) => {
 //@access private
 router.delete('/', auth, async (req, res) => {
   try {
+    //remove user posts
+    await Post.deleteMany({user:req.user.id});
     await Profile.findOneAndRemove({
       user: req.user.id,
     });
@@ -305,7 +306,7 @@ router.get('/github/:username', (req, res) => {
       }/repos?per_page=5&sort=created:asc&client_id=${config.get(
         'githubClientId'
       )}&client_secret=${config.get('githubSecret')}`,
-      method: 'Get',
+      method: 'GET',
       headers: { 'user-agent': 'node.js' },
     };
     request(options, (error, response, body) => {

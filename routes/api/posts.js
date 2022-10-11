@@ -59,7 +59,7 @@ router.get('/', auth, async (req, res) => {
 router.get('/:id', auth, async (req, res) => {
   try {
     if (mongoose.Types.ObjectId.isValid(req.params.id) == false) {
-      return res.status(400).json({ meg: 'Post not found' });
+      return res.status(404).json({ msg: 'Post not found' });
     }
     const post = await Post.findById(req.params.id);
     if (!post) {
@@ -69,7 +69,7 @@ router.get('/:id', auth, async (req, res) => {
   } catch (err) {
     console.error(err.message);
     if (err.kind === 'ObjectId') {
-      return res.status(400).json({ meg: 'Post not found' });
+      return res.status(404).json({ msg: 'Post not found' });
     }
 
     res.status(500).send('Server error');
@@ -82,7 +82,7 @@ router.get('/:id', auth, async (req, res) => {
 router.delete('/:id', auth, async (req, res) => {
   try {
     if (mongoose.Types.ObjectId.isValid(req.params.id) == false) {
-      return res.status(400).json({ meg: 'Post not found' });
+      return res.status(404).json({ msg: 'Post not found' });
     }
     const post = await Post.findById(req.params.id);
     if (!post) {
@@ -96,7 +96,7 @@ router.delete('/:id', auth, async (req, res) => {
   } catch (err) {
     console.error(err.message);
     if (err.kind === 'ObjectId') {
-      return res.status(400).json({ meg: 'Post not found' });
+      return res.status(404).json({ msg: 'Post not found' });
     }
     res.status(500).send('Server error');
   }
@@ -196,7 +196,7 @@ router.post(
 router.delete('/comment/:id/:comment_id', auth, async (req, res) => {
   try {
     if (mongoose.Types.ObjectId.isValid(req.params.id) == false) {
-      return res.status(400).json({ meg: 'Post not found' });
+      return res.status(404).json({ msg: 'Post not found' });
     }
     const post = await Post.findById(req.params.id);
     const comment = post.comments.find(
@@ -219,7 +219,7 @@ router.delete('/comment/:id/:comment_id', auth, async (req, res) => {
   } catch (err) {
     console.error(err.message);
     if (err.kind === 'ObjectId') {
-      return res.status(400).json({ meg: 'Post not found' });
+      return res.status(404).json({ msg: 'Post not found' });
     }
     res.status(500).send('Server error');
   }
